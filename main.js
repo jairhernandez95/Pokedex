@@ -36,7 +36,9 @@ function showAllPokemons(array)
             let individualDataDiv = document.createElement("div");
             individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
-            individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+            individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)");
+            let pokemonPosition = document.createElement("div");
+            pokemonPosition.innerHTML = `<h5> Pos: ${j}</h5>`;
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
@@ -44,6 +46,7 @@ function showAllPokemons(array)
             let pokemonType = document.createElement("div");
             pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
             allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
+            individualDataDiv.insertAdjacentElement("afterbegin", pokemonPosition);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
@@ -60,7 +63,9 @@ function showAllPokemons(array)
                 let individualDataDiv = document.createElement("div");
                 individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
-                individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+                individualDataDiv.setAttribute("onclick", "returnID()")
+                let pokemonPosition = document.createElement("div");
+                pokemonPosition.innerHTML = `<h5> Pos: ${j}</h5>`;
                 let pokemonImage = document.createElement("div");
                 pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
                 let pokemonName = document.createElement("div");
@@ -68,6 +73,7 @@ function showAllPokemons(array)
                 let pokemonType = document.createElement("div");
                 pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
                 allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
+                individualDataDiv.insertAdjacentElement("afterbegin", pokemonPosition);
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
@@ -80,33 +86,33 @@ function showAllPokemons(array)
 
 function returnID()
 {
-    
+    console.log("Estás en la función returnID")
 }
 
-function showModalPokemon(array)
-{
-    let id = document.getElementById()
-    // for(let k = 0; k < array.length; k++)
-    // {
-    //     let id = null;
-    //     if(array[k] == "NO DATA")
-    //     {
-    //         continue
-    //     }
-    //     else if(array[k] != "NO DATA")
-    //     {
-    //         let id = document.getElementById(`${k}`).textContent;
-    //         if(id.includes(array[k].name))
-    //         {
-    //             console.log(`${id}`);
-    //         }
-    //         else
-    //         {
-    //             continue
-    //         }
-    //     }
-    // }
-}
+// function showModalPokemon(array)
+// {
+//     let id = document.getElementById()
+//     for(let k = 0; k < array.length; k++)
+//     {
+//         let id = null;
+//         if(array[k] == "NO DATA")
+//         {
+//             continue
+//         }
+//         else if(array[k] != "NO DATA")
+//         {
+//             let id = document.getElementById(`${k}`).textContent;
+//             if(id.includes(array[k].name))
+//             {
+//                 console.log(`${id}`);
+//             }
+//             else
+//             {
+//                 continue
+//             }
+//         }
+//     }
+// }
 
 // Swal.fire({
 //     title: 'Sweet!',
