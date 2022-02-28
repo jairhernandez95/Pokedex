@@ -1,4 +1,5 @@
 let data = [];
+let auxiliarArray = [];
 let pokemonTypes = ["none","normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
 function getData()
 {
@@ -24,8 +25,6 @@ function showPokemonTypes(array)
 }
 function showAllPokemons(array)
 {
-    console.log(array);
-    let auxiliarArray = [];
     let resultDiv = document.getElementById("resultDiv");
     resultDiv.innerHTML = ``;
     let allDataDiv = document.getElementById("allDataDiv");
@@ -37,6 +36,7 @@ function showAllPokemons(array)
             let individualDataDiv = document.createElement("div");
             individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
+            individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
@@ -52,7 +52,7 @@ function showAllPokemons(array)
         {
             if(array[j].name == array[j-1].name)
             {
-                continue;
+                auxiliarArray.push("NO DATA");
             }
             else
             {
@@ -60,6 +60,7 @@ function showAllPokemons(array)
                 let individualDataDiv = document.createElement("div");
                 individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
+                individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
                 let pokemonImage = document.createElement("div");
                 pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
                 let pokemonName = document.createElement("div");
@@ -73,7 +74,38 @@ function showAllPokemons(array)
             }
         }
     }
-    console.log(auxiliarArray);
+    auxiliarArray.reverse();
+    console.log(auxiliarArray)
+}
+
+function returnID()
+{
+    
+}
+
+function showModalPokemon(array)
+{
+    let id = document.getElementById()
+    // for(let k = 0; k < array.length; k++)
+    // {
+    //     let id = null;
+    //     if(array[k] == "NO DATA")
+    //     {
+    //         continue
+    //     }
+    //     else if(array[k] != "NO DATA")
+    //     {
+    //         let id = document.getElementById(`${k}`).textContent;
+    //         if(id.includes(array[k].name))
+    //         {
+    //             console.log(`${id}`);
+    //         }
+    //         else
+    //         {
+    //             continue
+    //         }
+    //     }
+    // }
 }
 
 // Swal.fire({
