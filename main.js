@@ -1,33 +1,20 @@
-let data = [];
-let auxiliarArray = [];
-let pokemonTypes = ["none","normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
+let dataFromJSON = [];
+let dataClean = [];
 function getData()
 {
-    if(data.length == 0)
-    {
-        fetch("pokeapi.json")
-        .then(Response => Response.json())
-        .then(dataFile => {
-            data.push(dataFile);
-            showPokemonTypes(pokemonTypes);
-            showAllPokemons(dataFile);
-        });
-    }
-    else if(data.length > 0)
-    {
-        data = [];
-        auxiliarArray = [];
-        let resultDiv = document.getElementById("resultDiv");
-        let allDataDiv = document.getElementById("allDataDiv");
-        allDataDiv.innerHTML = ``;
-        resultDiv.innerHTML = ``;
-        fetch("pokeapi.json")
-        .then(Response => Response.json())
-        .then(dataFile => {
-            data.push(dataFile);
-            showAllPokemons(dataFile);
-        });
-    } 
+    let pokemonTypes = ["none","normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
+    let resultDiv = document.getElementById("resultDiv");
+    let allDataDiv = document.getElementById("allDataDiv");
+    allDataDiv.innerHTML = ``;
+    resultDiv.innerHTML = ``;
+    fetch("pokeapi.json")
+    .then(Response => Response.json())
+    .then(dataFile => {
+        dataFromJSON.push(dataFile);
+        console.log(dataFromJSON);
+        showPokemonTypes(pokemonTypes)
+        showAllPokemons(dataFile);
+    });
 }
 function showPokemonTypes(array)
 {
@@ -51,11 +38,11 @@ function showAllPokemons(array)
     {
         if(j == array.length-1 && j == 0 || j == 0)
         {
-            auxiliarArray.push(array[j]);
+            dataClean.push(array[j]);
             let individualDataDiv = document.createElement("div");
             individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
-            individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)");
+            // individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)");
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
@@ -71,15 +58,15 @@ function showAllPokemons(array)
         {
             if(array[j].name == array[j-1].name)
             {
-                auxiliarArray.push("NO DATA");
+                continue
             }
             else
             {
-                auxiliarArray.push(array[j]);
+                dataClean.push(array[j]);
                 let individualDataDiv = document.createElement("div");
                 individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
-                individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+                // individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
                 let pokemonImage = document.createElement("div");
                 pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
                 let pokemonName = document.createElement("div");
@@ -93,18 +80,19 @@ function showAllPokemons(array)
             }
         }
     }
-    auxiliarArray.reverse();
+    dataClean.reverse();
+    console.log(dataClean);
 }
-function filterData()
+function filterByType(array)
 {
+    let auxiliarArray = [];
     let option = document.getElementById("categoriesSelect").value;
-    let auxiliarArrayFilterData = [];
-    for(let l = 0; l < auxiliarArray.length; l++)
+    console.log(option);
+    for(let l = 0; l < array.length; l++)
     {
         if(option == "none")
         {
-            console.log(data);
-            getData();
+            location.reload();
             break;
         }
         else
@@ -115,9 +103,9 @@ function filterData()
             }
             else
             {
-                if(auxiliarArray[l].type.includes(option))
+                if(array[l].type.includes(option))
                 {
-                    auxiliarArrayFilterData.push(auxiliarArray[l]);
+                    auxiliarArray.push(array[l]);
                 }
                 else
                 {
@@ -126,8 +114,8 @@ function filterData()
             }
         }
     }
-    console.log(auxiliarArrayFilterData);
-    showFilteredData(auxiliarArrayFilterData);
+    console.log(auxiliarArray);
+    showFilteredData(auxiliarArray);
 }
 function showFilteredData(array)
 {
@@ -140,7 +128,7 @@ function showFilteredData(array)
         let individualDataDiv = document.createElement("div");
         individualDataDiv.setAttribute("id", `${m}`);
         individualDataDiv.setAttribute("class", "individualDataDiv");
-        individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+        // individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
         let pokemonImage = document.createElement("div");
         pokemonImage.innerHTML = `<img src="${array[m].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
         let pokemonName = document.createElement("div");
@@ -153,30 +141,49 @@ function showFilteredData(array)
         individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
     }
 }
-function showModalPokemon(array)
+function searchPokemon(array)
 {
-    for(let k = 0; k < array.length; k++)
+    let pokemonToSearch = document.getElementById("pokemonToSearch").value;
+    console.log(pokemonToSearch);
+    let auxiliarArray = [];
+    for(let l = 0; l < array.length; l++)
     {
-        let id = null;
-        if(array[k] == "NO DATA")
+        if(array[l].name.includes(pokemonToSearch))
         {
-            continue
+            auxiliarArray.push(array[l]);
         }
-        else if(array[k] != "NO DATA")
+        else
         {
-            let id = document.getElementById(`${k}`).textContent;
-            if(id.includes(array[k].name))
-            {
-                console.log(`${id}`);
-            }
-            else
-            {
-                continue
-            }
+            continue;
         }
     }
+    console.log(auxiliarArray);
+    showFilteredData(auxiliarArray);
 }
-
+getData();
+// function showModalPokemon(array)
+// {
+//     for(let k = 0; k < array.length; k++)
+//     {
+//         let id = null;
+//         if(array[k] == "NO DATA")
+//         {
+//             continue
+//         }
+//         else if(array[k] != "NO DATA")
+//         {
+//             let id = document.getElementById(`${k}`).textContent;
+//             if(id.includes(array[k].name))
+//             {
+//                 console.log(`${id}`);
+//             }
+//             else
+//             {
+//                 continue
+//             }
+//         }
+//     }
+// }
 // Swal.fire({
 //     title: 'Sweet!',
 //     text: 'Modal with a custom image.',
@@ -186,6 +193,3 @@ function showModalPokemon(array)
 //     imageAlt: 'Custom image',
 //   })
 // https://sweetalert2.github.io/#download
-
-
-getData();
