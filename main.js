@@ -3,13 +3,31 @@ let auxiliarArray = [];
 let pokemonTypes = ["none","normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
 function getData()
 {
-    fetch("pokeapi.json")
-    .then(Response => Response.json())
-    .then(dataFile => {
-        data.push(dataFile);
-        showPokemonTypes(pokemonTypes);
-        showAllPokemons(dataFile);
-    });
+    if(data.length == 0)
+    {
+        fetch("pokeapi.json")
+        .then(Response => Response.json())
+        .then(dataFile => {
+            data.push(dataFile);
+            showPokemonTypes(pokemonTypes);
+            showAllPokemons(dataFile);
+        });
+    }
+    else if(data.length > 0)
+    {
+        data = [];
+        auxiliarArray = [];
+        let resultDiv = document.getElementById("resultDiv");
+        let allDataDiv = document.getElementById("allDataDiv");
+        allDataDiv.innerHTML = ``;
+        resultDiv.innerHTML = ``;
+        fetch("pokeapi.json")
+        .then(Response => Response.json())
+        .then(dataFile => {
+            data.push(dataFile);
+            showAllPokemons(dataFile);
+        });
+    } 
 }
 function showPokemonTypes(array)
 {
@@ -28,6 +46,7 @@ function showAllPokemons(array)
     let resultDiv = document.getElementById("resultDiv");
     resultDiv.innerHTML = ``;
     let allDataDiv = document.getElementById("allDataDiv");
+    allDataDiv.innerHTML = ``;
     for(let j = array.length-1; j >= 0; j--)
     {
         if(j == array.length-1 && j == 0 || j == 0)
@@ -37,8 +56,6 @@ function showAllPokemons(array)
             individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
             individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)");
-            let pokemonPosition = document.createElement("div");
-            pokemonPosition.innerHTML = `<h5> Pos: ${j}</h5>`;
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
@@ -46,7 +63,6 @@ function showAllPokemons(array)
             let pokemonType = document.createElement("div");
             pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
             allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
-            individualDataDiv.insertAdjacentElement("afterbegin", pokemonPosition);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
@@ -63,9 +79,7 @@ function showAllPokemons(array)
                 let individualDataDiv = document.createElement("div");
                 individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
-                individualDataDiv.setAttribute("onclick", "returnID()")
-                let pokemonPosition = document.createElement("div");
-                pokemonPosition.innerHTML = `<h5> Pos: ${j}</h5>`;
+                individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
                 let pokemonImage = document.createElement("div");
                 pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
                 let pokemonName = document.createElement("div");
@@ -73,7 +87,6 @@ function showAllPokemons(array)
                 let pokemonType = document.createElement("div");
                 pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
                 allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
-                individualDataDiv.insertAdjacentElement("afterbegin", pokemonPosition);
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
@@ -81,38 +94,88 @@ function showAllPokemons(array)
         }
     }
     auxiliarArray.reverse();
-    console.log(auxiliarArray)
 }
-
-function returnID()
+function filterData()
 {
-    console.log("Estás en la función returnID")
+    let option = document.getElementById("categoriesSelect").value;
+    let auxiliarArrayFilterData = [];
+    for(let l = 0; l < auxiliarArray.length; l++)
+    {
+        if(option == "none")
+        {
+            console.log(data);
+            getData();
+            break;
+        }
+        else
+        {
+            if(auxiliarArray[l] == "NO DATA")
+            {
+                continue
+            }
+            else
+            {
+                if(auxiliarArray[l].type.includes(option))
+                {
+                    auxiliarArrayFilterData.push(auxiliarArray[l]);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+        }
+    }
+    console.log(auxiliarArrayFilterData);
+    showFilteredData(auxiliarArrayFilterData);
 }
-
-// function showModalPokemon(array)
-// {
-//     let id = document.getElementById()
-//     for(let k = 0; k < array.length; k++)
-//     {
-//         let id = null;
-//         if(array[k] == "NO DATA")
-//         {
-//             continue
-//         }
-//         else if(array[k] != "NO DATA")
-//         {
-//             let id = document.getElementById(`${k}`).textContent;
-//             if(id.includes(array[k].name))
-//             {
-//                 console.log(`${id}`);
-//             }
-//             else
-//             {
-//                 continue
-//             }
-//         }
-//     }
-// }
+function showFilteredData(array)
+{
+    let resultDiv = document.getElementById("resultDiv");
+    let allDataDiv = document.getElementById("allDataDiv");
+    allDataDiv.innerHTML = ``;
+    resultDiv.innerHTML = ``;
+    for(let m = array.length-1; m >= 0; m--)
+    {
+        let individualDataDiv = document.createElement("div");
+        individualDataDiv.setAttribute("id", `${m}`);
+        individualDataDiv.setAttribute("class", "individualDataDiv");
+        individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+        let pokemonImage = document.createElement("div");
+        pokemonImage.innerHTML = `<img src="${array[m].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
+        let pokemonName = document.createElement("div");
+        pokemonName.innerHTML = `<h5>${array[m].name}</h5>`;
+        let pokemonType = document.createElement("div");
+        pokemonType.innerHTML = `<h5>Type: ${array[m].type}</h5>`;
+        resultDiv.insertAdjacentElement("afterbegin",individualDataDiv);
+        individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
+        individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
+        individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
+    }
+}
+function showModalPokemon(array)
+{
+    for(let k = 0; k < array.length; k++)
+    {
+        let id = null;
+        if(array[k] == "NO DATA")
+        {
+            continue
+        }
+        else if(array[k] != "NO DATA")
+        {
+            let id = document.getElementById(`${k}`).textContent;
+            if(id.includes(array[k].name))
+            {
+                console.log(`${id}`);
+            }
+            else
+            {
+                continue
+            }
+        }
+    }
+}
 
 // Swal.fire({
 //     title: 'Sweet!',
