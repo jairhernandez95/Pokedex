@@ -42,7 +42,7 @@ function showAllPokemons(array)
             let individualDataDiv = document.createElement("div");
             individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
-            // individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)");
+            individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)");
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
@@ -66,7 +66,7 @@ function showAllPokemons(array)
                 let individualDataDiv = document.createElement("div");
                 individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
-                // individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+                individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
                 let pokemonImage = document.createElement("div");
                 pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
                 let pokemonName = document.createElement("div");
@@ -128,7 +128,7 @@ function showFilteredData(array)
         let individualDataDiv = document.createElement("div");
         individualDataDiv.setAttribute("id", `${m}`);
         individualDataDiv.setAttribute("class", "individualDataDiv");
-        // individualDataDiv.setAttribute("onclick", "showModalPokemon(auxiliarArray)")
+        individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
         let pokemonImage = document.createElement("div");
         pokemonImage.innerHTML = `<img src="${array[m].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
         let pokemonName = document.createElement("div");
@@ -160,30 +160,10 @@ function searchPokemon(array)
     console.log(auxiliarArray);
     showFilteredData(auxiliarArray);
 }
-getData();
-// function showModalPokemon(array)
-// {
-//     for(let k = 0; k < array.length; k++)
-//     {
-//         let id = null;
-//         if(array[k] == "NO DATA")
-//         {
-//             continue
-//         }
-//         else if(array[k] != "NO DATA")
-//         {
-//             let id = document.getElementById(`${k}`).textContent;
-//             if(id.includes(array[k].name))
-//             {
-//                 console.log(`${id}`);
-//             }
-//             else
-//             {
-//                 continue
-//             }
-//         }
-//     }
-// }
+function showModalPokemon(array)
+{
+    console.log(array);
+}
 // Swal.fire({
 //     title: 'Sweet!',
 //     text: 'Modal with a custom image.',
@@ -193,3 +173,4 @@ getData();
 //     imageAlt: 'Custom image',
 //   })
 // https://sweetalert2.github.io/#download
+getData();
