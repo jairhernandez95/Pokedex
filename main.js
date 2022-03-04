@@ -1,8 +1,8 @@
 let dataFromJSON = [];
 let dataClean = [];
+let pokemonTypes = ["none","normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
 function getData()
 {
-    let pokemonTypes = ["none","normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"];
     let resultDiv = document.getElementById("resultDiv");
     let allDataDiv = document.getElementById("allDataDiv");
     allDataDiv.innerHTML = ``;
@@ -11,7 +11,6 @@ function getData()
     .then(Response => Response.json())
     .then(dataFile => {
         dataFromJSON.push(dataFile);
-        console.log(dataFromJSON);
         showPokemonTypes(pokemonTypes)
         showAllPokemons(dataFile);
     });
@@ -30,6 +29,7 @@ function showPokemonTypes(array)
 }
 function showAllPokemons(array)
 {
+    cleanData(dataFromJSON);
     let resultDiv = document.getElementById("resultDiv");
     resultDiv.innerHTML = ``;
     let allDataDiv = document.getElementById("allDataDiv");
@@ -81,18 +81,19 @@ function showAllPokemons(array)
         }
     }
     dataClean.reverse();
-    console.log(dataClean);
 }
 function filterByType(array)
 {
     let auxiliarArray = [];
     let option = document.getElementById("categoriesSelect").value;
-    console.log(option);
     for(let l = 0; l < array.length; l++)
     {
         if(option == "none")
         {
-            location.reload();
+            dataFromJSON = [];
+            dataClean = [];
+            pokemonTypes = [];
+            getData();
             break;
         }
         else
@@ -114,7 +115,6 @@ function filterByType(array)
             }
         }
     }
-    console.log(auxiliarArray);
     showFilteredData(auxiliarArray);
 }
 function showFilteredData(array)
@@ -144,7 +144,6 @@ function showFilteredData(array)
 function searchPokemon(array)
 {
     let pokemonToSearch = document.getElementById("pokemonToSearch").value;
-    console.log(pokemonToSearch);
     let auxiliarArray = [];
     for(let l = 0; l < array.length; l++)
     {
@@ -157,12 +156,34 @@ function searchPokemon(array)
             continue;
         }
     }
-    console.log(auxiliarArray);
     showFilteredData(auxiliarArray);
 }
 function showModalPokemon(array)
 {
     console.log(array);
+}
+function cleanData(array)
+{
+    let auxiliarArray = [];
+    for(let j = array[0].length-1; j >= 0; j--)
+    {
+        if(j == array[0].length-1 && j == 0 || j == 0)
+        {
+            auxiliarArray.push(array[0][j]);
+        }
+        else if(j < array[0].length-1)
+        {
+            if(array[0][j].name == array[0][j-1].name)
+            {
+                continue
+            }
+            else
+            {
+                auxiliarArray.push(array[j]);
+            }
+        }
+    }
+    console.log(auxiliarArray);
 }
 // Swal.fire({
 //     title: 'Sweet!',
