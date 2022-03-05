@@ -11,8 +11,9 @@ function getData()
     .then(Response => Response.json())
     .then(dataFile => {
         dataFromJSON.push(dataFile);
-        showPokemonTypes(pokemonTypes)
-        showAllPokemons(dataFile);
+        showPokemonTypes(pokemonTypes);
+        cleanData(dataFromJSON);
+        showAllPokemons(dataClean);
     });
 }
 function showPokemonTypes(array)
@@ -27,22 +28,41 @@ function showPokemonTypes(array)
         categoriesSelect.appendChild(option);
     }
 }
+function cleanData(array)
+{
+    for(let j = array[0].length-1; j >= 0; j--)
+    {
+        if(j == array[0].length-1 && j == 0 || j == 0)
+        {
+            dataClean.push(array[0][j]);
+        }
+        else if(j < array[0].length-1)
+        {
+            if(array[0][j].name == array[0][j-1].name)
+            {
+                continue
+            }
+            else
+            {
+                dataClean.push(array[0][j]);
+            }
+        }
+    }
+}
 function showAllPokemons(array)
 {
-    cleanData(dataFromJSON);
     let resultDiv = document.getElementById("resultDiv");
     resultDiv.innerHTML = ``;
     let allDataDiv = document.getElementById("allDataDiv");
     allDataDiv.innerHTML = ``;
-    for(let j = array.length-1; j >= 0; j--)
+    for(let j = 0; j < array.length; j++)
     {
-        if(j == array.length-1 && j == 0 || j == 0)
+        if(j == 0)
         {
-            dataClean.push(array[j]);
             let individualDataDiv = document.createElement("div");
             individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
-            individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)");
+            individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
@@ -54,15 +74,14 @@ function showAllPokemons(array)
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
             individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
         }
-        else if(j < array.length-1)
+        else if(j > 0)
         {
             if(array[j].name == array[j-1].name)
             {
-                continue
+                continue;
             }
             else
             {
-                dataClean.push(array[j]);
                 let individualDataDiv = document.createElement("div");
                 individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
@@ -79,8 +98,48 @@ function showAllPokemons(array)
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
             }
         }
+        // if(j == 0)
+        // {
+        //     let individualDataDiv = document.createElement("div");
+        //     individualDataDiv.setAttribute("id", `${j}`);
+        //     individualDataDiv.setAttribute("class", "individualDataDiv");
+        //     individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)");
+        //     let pokemonImage = document.createElement("div");
+        //     pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
+        //     let pokemonName = document.createElement("div");
+        //     pokemonName.innerHTML = `<h5>${array[j].name}</h5>`;
+        //     let pokemonType = document.createElement("div");
+        //     pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
+        //     allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
+        //     individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
+        //     individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
+        //     individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
+        // }
+        // else if(j > 0)
+        // {
+        //     if(array[j].name == array[j-1].name)
+        //     {
+        //         continue
+        //     }
+        //     else
+        //     {
+        //         let individualDataDiv = document.createElement("div");
+        //         individualDataDiv.setAttribute("id", `${j}`);
+        //         individualDataDiv.setAttribute("class", "individualDataDiv");
+        //         individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
+        //         let pokemonImage = document.createElement("div");
+        //         pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
+        //         let pokemonName = document.createElement("div");
+        //         pokemonName.innerHTML = `<h5>${array[j].name}</h5>`;
+        //         let pokemonType = document.createElement("div");
+        //         pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
+        //         allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
+        //         individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
+        //         individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
+        //         individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
+        //     }
+        // }
     }
-    dataClean.reverse();
 }
 function filterByType(array)
 {
@@ -98,23 +157,17 @@ function filterByType(array)
         }
         else
         {
-            if(auxiliarArray[l] == "NO DATA")
+            if(array[l].type.includes(option))
             {
-                continue
+                auxiliarArray.push(array[l]);
             }
             else
             {
-                if(array[l].type.includes(option))
-                {
-                    auxiliarArray.push(array[l]);
-                }
-                else
-                {
-                    continue;
-                }
+                continue;
             }
         }
     }
+    auxiliarArray.reverse();
     showFilteredData(auxiliarArray);
 }
 function showFilteredData(array)
@@ -156,35 +209,16 @@ function searchPokemon(array)
             continue;
         }
     }
+    auxiliarArray.reverse();
     showFilteredData(auxiliarArray);
 }
+
+
 function showModalPokemon(array)
 {
     console.log(array);
 }
-function cleanData(array)
-{
-    let auxiliarArray = [];
-    for(let j = array[0].length-1; j >= 0; j--)
-    {
-        if(j == array[0].length-1 && j == 0 || j == 0)
-        {
-            auxiliarArray.push(array[0][j]);
-        }
-        else if(j < array[0].length-1)
-        {
-            if(array[0][j].name == array[0][j-1].name)
-            {
-                continue
-            }
-            else
-            {
-                auxiliarArray.push(array[j]);
-            }
-        }
-    }
-    console.log(auxiliarArray);
-}
+
 // Swal.fire({
 //     title: 'Sweet!',
 //     text: 'Modal with a custom image.',
