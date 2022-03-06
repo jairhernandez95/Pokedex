@@ -60,13 +60,12 @@ function showAllPokemons(array)
         if(j == 0)
         {
             let individualDataDiv = document.createElement("div");
-            individualDataDiv.setAttribute("id", `${j}`);
             individualDataDiv.setAttribute("class", "individualDataDiv");
             individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
             let pokemonImage = document.createElement("div");
             pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
             let pokemonName = document.createElement("div");
-            pokemonName.innerHTML = `<h5>${array[j].name}</h5>`;
+            pokemonName.innerHTML = `<h5 id=${j}>${array[j].name}</h5>`;
             let pokemonType = document.createElement("div");
             pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
             allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
@@ -83,13 +82,12 @@ function showAllPokemons(array)
             else
             {
                 let individualDataDiv = document.createElement("div");
-                individualDataDiv.setAttribute("id", `${j}`);
                 individualDataDiv.setAttribute("class", "individualDataDiv");
                 individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
                 let pokemonImage = document.createElement("div");
                 pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
                 let pokemonName = document.createElement("div");
-                pokemonName.innerHTML = `<h5>${array[j].name}</h5>`;
+                pokemonName.innerHTML = `<h5 id=${j}>${array[j].name}</h5>`;
                 let pokemonType = document.createElement("div");
                 pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
                 allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
@@ -98,47 +96,6 @@ function showAllPokemons(array)
                 individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
             }
         }
-        // if(j == 0)
-        // {
-        //     let individualDataDiv = document.createElement("div");
-        //     individualDataDiv.setAttribute("id", `${j}`);
-        //     individualDataDiv.setAttribute("class", "individualDataDiv");
-        //     individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)");
-        //     let pokemonImage = document.createElement("div");
-        //     pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
-        //     let pokemonName = document.createElement("div");
-        //     pokemonName.innerHTML = `<h5>${array[j].name}</h5>`;
-        //     let pokemonType = document.createElement("div");
-        //     pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
-        //     allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
-        //     individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
-        //     individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
-        //     individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
-        // }
-        // else if(j > 0)
-        // {
-        //     if(array[j].name == array[j-1].name)
-        //     {
-        //         continue
-        //     }
-        //     else
-        //     {
-        //         let individualDataDiv = document.createElement("div");
-        //         individualDataDiv.setAttribute("id", `${j}`);
-        //         individualDataDiv.setAttribute("class", "individualDataDiv");
-        //         individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
-        //         let pokemonImage = document.createElement("div");
-        //         pokemonImage.innerHTML = `<img src="${array[j].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
-        //         let pokemonName = document.createElement("div");
-        //         pokemonName.innerHTML = `<h5>${array[j].name}</h5>`;
-        //         let pokemonType = document.createElement("div");
-        //         pokemonType.innerHTML = `<h5>Type: ${array[j].type}</h5>`;
-        //         allDataDiv.insertAdjacentElement("afterbegin",individualDataDiv);
-        //         individualDataDiv.insertAdjacentElement("afterbegin", pokemonType);
-        //         individualDataDiv.insertAdjacentElement("afterbegin", pokemonName);
-        //         individualDataDiv.insertAdjacentElement("afterbegin", pokemonImage);
-        //     }
-        // }
     }
 }
 function filterByType(array)
@@ -179,13 +136,12 @@ function showFilteredData(array)
     for(let m = array.length-1; m >= 0; m--)
     {
         let individualDataDiv = document.createElement("div");
-        individualDataDiv.setAttribute("id", `${m}`);
         individualDataDiv.setAttribute("class", "individualDataDiv");
         individualDataDiv.setAttribute("onclick", "showModalPokemon(dataClean)")
         let pokemonImage = document.createElement("div");
         pokemonImage.innerHTML = `<img src="${array[m].ThumbnailImage}" onerror="this.onerror=null;this.src='errorLoad.png';">`
         let pokemonName = document.createElement("div");
-        pokemonName.innerHTML = `<h5>${array[m].name}</h5>`;
+        pokemonName.innerHTML = `<h5 id=${m}>${array[m].name}</h5>`;
         let pokemonType = document.createElement("div");
         pokemonType.innerHTML = `<h5>Type: ${array[m].type}</h5>`;
         resultDiv.insertAdjacentElement("afterbegin",individualDataDiv);
@@ -216,7 +172,22 @@ function searchPokemon(array)
 
 function showModalPokemon(array)
 {
-    console.log(array);
+    for(let i = dataClean.length-1; i > 0; i--)
+    {
+        let nameToCompare = dataClean[i].name
+        for(let j = 0; j < array.length-1; j++)
+        {
+            let id = document.getElementById(`${j}`).textContent;
+            if(id == nameToCompare)
+            {
+                console.log(`${nameToCompare} es similar a ${id}`)
+            }
+            else
+            {
+                continue
+            }
+        }
+    }
 }
 
 // Swal.fire({
