@@ -162,7 +162,7 @@ function searchPokemon(array)
 }
 function showModalPokemon(array)
 {
-    console.log(array);
+    console.log("Hello");
 }
 // Swal.fire({
 //     title: 'Sweet!',
